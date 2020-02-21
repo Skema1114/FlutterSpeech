@@ -86,7 +86,7 @@ class _VoiceHomeState extends State<VoiceHome> {
                     if (_isAvaliable && !_isListening) {
                       _speechRecognition
                           .listen(
-                            locale: "en_US",
+                            locale: "pt_BR",
                           )
                           .then((result) => print('$result'));
                     }
