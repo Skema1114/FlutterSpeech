@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_recognition/speech_recognition.dart';
 
 //REF
@@ -28,6 +29,8 @@ class _VoiceHomeState extends State<VoiceHome> {
 
   String resultText = '';
 
+  final FlutterTts flutterTts = FlutterTts();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -56,6 +59,15 @@ class _VoiceHomeState extends State<VoiceHome> {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController textEditingController = TextEditingController();
+
+    Future _speak(String text) async {
+      //print(await flutterTts.getLanguages);
+      await flutterTts.setLanguage("pt-BR");
+      await flutterTts.setPitch(1);
+      await flutterTts.speak(text);
+    }
+
     return Scaffold(
       body: Container(
         child: Column(
@@ -120,6 +132,30 @@ class _VoiceHomeState extends State<VoiceHome> {
               child: Text(
                 resultText,
                 style: TextStyle(fontSize: 24.0),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width * 0.8,
+              decoration: BoxDecoration(
+                color: Colors.cyanAccent[100],
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 12.0,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextFormField(
+                    controller: textEditingController,
+                  ),
+                  RaisedButton(
+                    child: Text("Falar"),
+                    onPressed: () => _speak(textEditingController.text),
+                  ),
+                ],
               ),
             )
           ],
