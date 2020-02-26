@@ -34,7 +34,10 @@ class _VoiceHomeState extends State<VoiceHome> {
   final FlutterTts flutterTts = FlutterTts();
 
   Color fundoTela = Colors.white;
+  Color configuracaoCor = Colors.deepPurple[200];
   double tamanhoFonte = 24.0;
+
+  //bool modoConfiguracao = null;
 
   @override
   Future<void> initState() {
@@ -116,54 +119,55 @@ class _VoiceHomeState extends State<VoiceHome> {
 
   void configuracaoPorVoz(String comando) {
     switch (comando) {
-      case "backgound vermelho":
+      case "ativar modo de configuração":
+        configuracaoCor = Colors.red;
+        //modoConfiguracao = true;
+        flutterTts.speak("O modo de configuração foi ativado!");
+        Toast.show("Modo de configuração ATIVADO!", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        break;
+      case "desativar modo de configuração":
+        configuracaoCor = Colors.deepPurple[200];
+        //modoConfiguracao = false;
+        flutterTts.speak("O modo de configuração foi ativado!");
+        Toast.show("Modo de configuração DESATIVADO!", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        break;
+      case "fundo vermelho":
+        //if (modoConfiguracao == true) {
         fundoTela = Colors.red;
         flutterTts.speak("A cor do background foi alterada para vermelho");
+        //}
         break;
-      case "backgound azul":
+      case "fundo azul":
+        //if (modoConfiguracao == true) {
         fundoTela = Colors.blue;
         flutterTts.speak("A cor do background foi alterada para azul");
+        //}
         break;
-      case "backgound padrão":
-        fundoTela = Colors.blue;
+      case "fundo padrão":
+        //if (modoConfiguracao == true) {
+        fundoTela = Colors.white;
         flutterTts.speak("A cor do background foi alterada para o padrão");
+        //}
         break;
-      case "tamanho da fonte maior":
+      case "tamanho da fonte grande":
+        //if (modoConfiguracao == true) {
         tamanhoFonte = 40.0;
         flutterTts.speak("O tamanho da fonte foi alterado para 40");
+        //}
         break;
-      case "tamanho da fonte menor":
+      case "tamanho da fonte pequena":
+        //if (modoConfiguracao == true) {
         tamanhoFonte = 8.0;
         flutterTts.speak("O tamanho da fonte foi alterado para 8");
+        //}
         break;
       case "tamanho da fonte padrão":
+        //if (modoConfiguracao == true) {
         tamanhoFonte = 24.0;
         flutterTts.speak("O tamanho da fonte foi alterado para o padrão");
-        break;
-      // =================
-      case "Backgound vermelho":
-        fundoTela = Colors.red;
-        flutterTts.speak("A cor do background foi alterada para vermelho");
-        break;
-      case "Backgound azul":
-        fundoTela = Colors.blue;
-        flutterTts.speak("A cor do background foi alterada para azul");
-        break;
-      case "Backgound padrão":
-        fundoTela = Colors.blue;
-        flutterTts.speak("A cor do background foi alterada para o padrão");
-        break;
-      case "Tamanho da fonte maior":
-        tamanhoFonte = 40.0;
-        flutterTts.speak("O tamanho da fonte foi alterado para 40");
-        break;
-      case "Tamanho da fonte menor":
-        tamanhoFonte = 8.0;
-        flutterTts.speak("O tamanho da fonte foi alterado para 8");
-        break;
-      case "Tamanho da fonte padrão":
-        tamanhoFonte = 24.0;
-        flutterTts.speak("O tamanho da fonte foi alterado para o padrão");
+        //}
         break;
     }
   }
@@ -211,7 +215,8 @@ class _VoiceHomeState extends State<VoiceHome> {
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
               decoration: BoxDecoration(
-                color: Colors.deepPurple[200],
+                color: configuracaoCor,
+                //Colors.deepPurple[200],
                 borderRadius: BorderRadius.circular(6.0),
               ),
               padding: EdgeInsets.symmetric(
@@ -243,7 +248,7 @@ class _VoiceHomeState extends State<VoiceHome> {
                   TextFormField(
                       controller: textEditingController,
                       decoration: InputDecoration(
-                        labelText: 'Escreva algo',
+                        labelText: 'Escreva algo aqui',
                         focusColor: Colors.white,
                       )),
                   RaisedButton(
@@ -264,12 +269,24 @@ class _VoiceHomeState extends State<VoiceHome> {
                 ),
                 child: Column(
                   children: <Widget>[
-                    Text('backgound vermelho'),
-                    Text('backgound azul'),
-                    Text('backgound padrão'),
-                    Text('tamanho da fonte maior'),
-                    Text('tamanho da fonte menor'),
-                    Text('tamanho da fonte padrão'),
+                    Text(
+                      '[ativar ou desativar] modo de configuração\n',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    Text(
+                      'fundo [vermelho, azul e padrão]\n',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    Text(
+                      'tamanho da fonte [grande, pequena e padrão]',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
                   ],
                 ),
               ),
