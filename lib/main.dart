@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 //REF
-//https://www.youtube.com/watch?v=-rQ_OmPj300
 //https://www.youtube.com/watch?v=WnJZOi57oTY
 
 void main() => runApp(flutterSpech());
