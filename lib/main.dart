@@ -1,13 +1,18 @@
+import 'package:flutterspeech/banco_dados/dao/Configuracao_DAO.dart';
+import 'package:flutterspeech/banco_dados/configuracao_db.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_recognition/speech_recognition.dart';
+import 'modelo/configuracao.dart';
 
 //REF
 //https://www.youtube.com/watch?v=-rQ_OmPj300
 
-void main() => runApp(flutterSpech());
+void main() {
+  runApp(flutterSpech());
+}
 
 class flutterSpech extends StatelessWidget {
   // This widget is the root of your application.
@@ -36,17 +41,18 @@ class _VoiceHomeState extends State<VoiceHome> {
   Color fundoTela = Colors.white;
   Color configuracaoCor = Colors.deepPurple[200];
   double tamanhoFonte = 24.0;
+  bool modoConfiguracao = false;
 
-  //bool modoConfiguracao = null;
+  //final ConfiguracaoDAO _configuracaoDAO = ConfiguracaoDAO();
 
   @override
   Future<void> initState() {
     // TODO: implement initState
     super.initState();
-    permissionHome();
+    solicitarPermissao();
   }
 
-  Future permissionHome() async {
+  Future solicitarPermissao() async {
     final PermissionHandler _permissionHandler = PermissionHandler();
     var result = await _permissionHandler
         .requestPermissions([PermissionGroup.microphone]);
@@ -58,7 +64,7 @@ class _VoiceHomeState extends State<VoiceHome> {
         initSpeechRecognizer();
         break;
       case PermissionStatus.denied:
-        permissionHome();
+        solicitarPermissao();
         break;
       case PermissionStatus.disabled:
         Toast.show("PERMISSÃO DESABILITADA", context,
@@ -118,56 +124,56 @@ class _VoiceHomeState extends State<VoiceHome> {
   }
 
   void configuracaoPorVoz(String comando) {
-    switch (comando) {
-      case "ativar modo de configuração":
+    switch (comando.toLowerCase()) {
+      case "configuração ativada":
         configuracaoCor = Colors.red;
-        //modoConfiguracao = true;
+        modoConfiguracao = true;
         flutterTts.speak("O modo de configuração foi ativado!");
         Toast.show("Modo de configuração ATIVADO!", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         break;
-      case "desativar modo de configuração":
+      case "configuração desativada":
         configuracaoCor = Colors.deepPurple[200];
-        //modoConfiguracao = false;
-        flutterTts.speak("O modo de configuração foi ativado!");
+        modoConfiguracao = false;
+        flutterTts.speak("O modo de configuração foi desativado!");
         Toast.show("Modo de configuração DESATIVADO!", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         break;
       case "fundo vermelho":
-        //if (modoConfiguracao == true) {
-        fundoTela = Colors.red;
-        flutterTts.speak("A cor do background foi alterada para vermelho");
-        //}
+        if (modoConfiguracao == true) {
+          fundoTela = Colors.red;
+          flutterTts.speak("A cor do background foi alterada para vermelho");
+        }
         break;
       case "fundo azul":
-        //if (modoConfiguracao == true) {
-        fundoTela = Colors.blue;
-        flutterTts.speak("A cor do background foi alterada para azul");
-        //}
+        if (modoConfiguracao == true) {
+          fundoTela = Colors.blue;
+          flutterTts.speak("A cor do background foi alterada para azul");
+        }
         break;
       case "fundo padrão":
-        //if (modoConfiguracao == true) {
-        fundoTela = Colors.white;
-        flutterTts.speak("A cor do background foi alterada para o padrão");
-        //}
+        if (modoConfiguracao == true) {
+          fundoTela = Colors.white;
+          flutterTts.speak("A cor do background foi alterada para o padrão");
+        }
         break;
       case "tamanho da fonte grande":
-        //if (modoConfiguracao == true) {
-        tamanhoFonte = 40.0;
-        flutterTts.speak("O tamanho da fonte foi alterado para 40");
-        //}
+        if (modoConfiguracao == true) {
+          tamanhoFonte = 40.0;
+          flutterTts.speak("O tamanho da fonte foi alterado para 40");
+        }
         break;
       case "tamanho da fonte pequena":
-        //if (modoConfiguracao == true) {
-        tamanhoFonte = 8.0;
-        flutterTts.speak("O tamanho da fonte foi alterado para 8");
-        //}
+        if (modoConfiguracao == true) {
+          tamanhoFonte = 8.0;
+          flutterTts.speak("O tamanho da fonte foi alterado para 8");
+        }
         break;
       case "tamanho da fonte padrão":
-        //if (modoConfiguracao == true) {
-        tamanhoFonte = 24.0;
-        flutterTts.speak("O tamanho da fonte foi alterado para o padrão");
-        //}
+        if (modoConfiguracao == true) {
+          tamanhoFonte = 24.0;
+          flutterTts.speak("O tamanho da fonte foi alterado para o padrão");
+        }
         break;
     }
   }
@@ -270,7 +276,7 @@ class _VoiceHomeState extends State<VoiceHome> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      '[ativar ou desativar] modo de configuração\n',
+                      'configuração [ativada ou desativada]\n',
                       style: TextStyle(
                         fontSize: 16.0,
                       ),
