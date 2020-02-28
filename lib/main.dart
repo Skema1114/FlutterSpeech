@@ -1,20 +1,19 @@
 import 'package:flutterspeech/banco_dados/dao/Configuracao_DAO.dart';
-import 'package:flutterspeech/banco_dados/configuracao_db.dart';
-import 'package:toast/toast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_recognition/speech_recognition.dart';
-import 'modelo/configuracao.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 //REF
 //https://www.youtube.com/watch?v=-rQ_OmPj300
+//https://www.youtube.com/watch?v=WnJZOi57oTY
 
 void main() {
-  runApp(flutterSpech());
+  runApp(FlutteSpeech());
 }
 
-class flutterSpech extends StatelessWidget {
+class FlutteSpeech extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -30,20 +29,16 @@ class VoiceHome extends StatefulWidget {
 }
 
 class _VoiceHomeState extends State<VoiceHome> {
+  final FlutterTts flutterTts = FlutterTts();
+  final ConfiguracaoDAO _configuracaoDAO = ConfiguracaoDAO();
   SpeechRecognition _speechRecognition;
   bool _isAvaliable = false;
   bool _isListening = false;
-
-  String resultText = '';
-
-  final FlutterTts flutterTts = FlutterTts();
-
+  bool modoConfiguracao = false;
   Color fundoTela = Colors.white;
   Color configuracaoCor = Colors.deepPurple[200];
   double tamanhoFonte = 24.0;
-  bool modoConfiguracao = false;
-
-  //final ConfiguracaoDAO _configuracaoDAO = ConfiguracaoDAO();
+  String resultText = '';
 
   @override
   Future<void> initState() {
@@ -89,13 +84,10 @@ class _VoiceHomeState extends State<VoiceHome> {
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         break;
       case PermissionStatus.disabled:
-        // do something
         break;
       case PermissionStatus.restricted:
-        // do something
         break;
       case PermissionStatus.unknown:
-        // do something
         break;
       default:
     }
@@ -104,23 +96,20 @@ class _VoiceHomeState extends State<VoiceHome> {
   void initSpeechRecognizer() {
     _speechRecognition = SpeechRecognition();
     _speechRecognition.setAvailabilityHandler(
-      (bool result) => setState(() => _isAvaliable = result),
-    );
+        (bool result) => setState(() => _isAvaliable = result));
     _speechRecognition.setRecognitionStartedHandler(
-      () => setState(() => _isListening = true),
-    );
+        () => setState(() => _isListening = true));
     _speechRecognition.setRecognitionResultHandler(
       (String speech) => setState(() {
         resultText = speech;
         configuracaoPorVoz(resultText);
-      }),
+      })
     );
     _speechRecognition.setRecognitionCompleteHandler(
-      () => setState(() => _isListening = false),
-    );
-    _speechRecognition.activate().then(
-          (result) => setState(() => _isAvaliable = result),
-        );
+        () => setState(() => _isListening = false));
+    _speechRecognition
+        .activate()
+        .then((result) => setState(() => _isAvaliable = result));
   }
 
   void configuracaoPorVoz(String comando) {
@@ -128,14 +117,14 @@ class _VoiceHomeState extends State<VoiceHome> {
       case "configuração ativada":
         configuracaoCor = Colors.red;
         modoConfiguracao = true;
-        flutterTts.speak("O modo de configuração foi ativado!");
+        flutterTts.speak("modo de configuração ativado!");
         Toast.show("Modo de configuração ATIVADO!", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         break;
       case "configuração desativada":
         configuracaoCor = Colors.deepPurple[200];
         modoConfiguracao = false;
-        flutterTts.speak("O modo de configuração foi desativado!");
+        flutterTts.speak("modo de configuração desativado!");
         Toast.show("Modo de configuração DESATIVADO!", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         break;
@@ -183,7 +172,6 @@ class _VoiceHomeState extends State<VoiceHome> {
     TextEditingController textEditingController = TextEditingController();
 
     Future _speak(String text) async {
-      //print(await flutterTts.getLanguages);
       await flutterTts.setLanguage("pt_BR");
       await flutterTts.setPitch(1);
       await flutterTts.speak(text);
@@ -222,7 +210,6 @@ class _VoiceHomeState extends State<VoiceHome> {
               width: MediaQuery.of(context).size.width * 0.8,
               decoration: BoxDecoration(
                 color: configuracaoCor,
-                //Colors.deepPurple[200],
                 borderRadius: BorderRadius.circular(6.0),
               ),
               padding: EdgeInsets.symmetric(
@@ -270,7 +257,7 @@ class _VoiceHomeState extends State<VoiceHome> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.red[200],
+                  color: Colors.pink,
                   borderRadius: BorderRadius.circular(6.0),
                 ),
                 child: Column(
@@ -279,18 +266,21 @@ class _VoiceHomeState extends State<VoiceHome> {
                       'configuração [ativada ou desativada]\n',
                       style: TextStyle(
                         fontSize: 16.0,
+                        color: Colors.white,
                       ),
                     ),
                     Text(
                       'fundo [vermelho, azul e padrão]\n',
                       style: TextStyle(
                         fontSize: 16.0,
+                        color: Colors.white,
                       ),
                     ),
                     Text(
                       'tamanho da fonte [grande, pequena e padrão]',
                       style: TextStyle(
                         fontSize: 16.0,
+                        color: Colors.white,
                       ),
                     ),
                   ],
