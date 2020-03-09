@@ -1,4 +1,5 @@
 import 'package:flutterspeech/banco_dados/dao/Configuracao_DAO.dart';
+import 'package:flutterspeech/view/home_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_recognition/speech_recognition.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -18,7 +19,7 @@ class FlutteSpeech extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: VoiceHome(),
+      home: HomePage(),
     );
   }
 }
